@@ -7,3 +7,9 @@ def find_bad_temperatures(rows: list[dict], low: float = -90, high: float = 60) 
         if temp < low or temp > high:
             bad.append(row)
     return bad
+
+
+def validate_rows(rows: list[dict]) -> None:
+    bad = find_bad_temperatures(rows)
+    if bad:
+        raise ValueError(f"{len(bad)} rows with impossible temperature, first: {bad[0]}")

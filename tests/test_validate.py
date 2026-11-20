@@ -16,3 +16,17 @@ def test_too_hot_is_flagged():
 
 def test_none_is_not_flagged():
     assert find_bad_temperatures([make_row(None)]) == []
+
+import pytest
+from validate import find_bad_temperatures, validate_rows
+
+
+def test_validate_rows_raises_on_bad_data():
+    rows = [{"city": "london", "temperature_c": 999.0}]
+    with pytest.raises(ValueError):
+        validate_rows(rows)
+
+
+def test_validate_rows_passes_on_good_data():
+    rows = [{"city": "london", "temperature_c": 15.0}]
+    validate_rows(rows)  # should not raise
