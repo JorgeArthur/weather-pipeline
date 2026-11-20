@@ -16,13 +16,13 @@ def get_connection():
 def load_raw(city: str, payload: dict) -> None:
     with get_connection() as conn:
         conn.execute(
-            "INSERT INTO raw.api_responses (city, payload) VALUES (%s, %s)",
+            "INSERT INTO bronze.api_responses (city, payload) VALUES (%s, %s)",
             (city, Jsonb(payload)),
         )
 
 def load_clean(rows: list[dict]) -> int:
     sql = """
-        INSERT INTO clean.hourly_weather
+        INSERT INTO silver.hourly_weather
             (city, observed_at, temperature_c, precipitation_mm, wind_speed_kmh)
         VALUES
             (%(city)s, %(observed_at)s, %(temperature_c)s,

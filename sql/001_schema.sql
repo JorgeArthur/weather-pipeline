@@ -1,14 +1,15 @@
-CREATE SCHEMA IF NOT EXISTS raw;
-CREATE SCHEMA IF NOT EXISTS clean;
+CREATE SCHEMA IF NOT EXISTS bronze;
+CREATE SCHEMA IF NOT EXISTS silver;
+CREATE SCHEMA IF NOT EXISTS gold;
 
-CREATE TABLE raw.api_responses (
+CREATE TABLE bronze.api_responses (
     id          BIGSERIAL PRIMARY KEY,
     city        TEXT        NOT NULL,
     fetched_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     payload     JSONB       NOT NULL
 );
 
-CREATE TABLE clean.hourly_weather (
+CREATE TABLE silver.hourly_weather (
     city            TEXT        NOT NULL,
     observed_at     TIMESTAMPTZ NOT NULL,
     temperature_c   NUMERIC(5,2),
