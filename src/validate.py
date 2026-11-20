@@ -13,3 +13,14 @@ def validate_rows(rows: list[dict]) -> None:
     bad = find_bad_temperatures(rows)
     if bad:
         raise ValueError(f"{len(bad)} rows with impossible temperature, first: {bad[0]}")
+
+
+def find_negative_values(rows: list[dict], field: str) -> list[dict]:
+    bad = []
+    for row in rows:
+        value = row.get(field)
+        if value is None:
+            continue
+        if value < 0:
+            bad.append(row)
+    return bad

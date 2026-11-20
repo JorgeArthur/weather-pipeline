@@ -1,5 +1,5 @@
 from validate import find_bad_temperatures
-
+from validate import find_negative_values
 
 def make_row(temp):
     return {"city": "london", "temperature_c": temp}
@@ -30,3 +30,21 @@ def test_validate_rows_raises_on_bad_data():
 def test_validate_rows_passes_on_good_data():
     rows = [{"city": "london", "temperature_c": 15.0}]
     validate_rows(rows)  # should not raise
+
+
+def test_negative_precipitation_is_flagged():
+    rows = [{"city": "london", "precipitation_mm": -1.0}]
+    assert find_negative_values(rows, "precipitation_mm") == rows
+
+
+def test_zero_and_positive_are_ok():
+    rows = [
+        {"city": "london", "precipitation_mm": 0.0},
+        {"city": "london", "precipitation_mm": 2.5},
+    ]
+    assert find_negative_values(rows, "precipitation_mm") == []
+
+
+def test_none_is_not_flagged_as_negative():
+    rows = [{"city": "london", "precipitation_mm": None}]
+    assert find_negative_values(rows, "precipitation_mm") == []
