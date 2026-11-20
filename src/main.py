@@ -4,6 +4,7 @@ import sys
 from extract import CITIES, build_session, fetch_city
 from load import load_raw, load_clean
 from transform import transform_hourly
+from validate import validate_rows
 
 logging.basicConfig(
     level=logging.INFO,
@@ -21,6 +22,7 @@ def run() -> int:
             payload = fetch_city(session, city)
             load_raw(city, payload)
             rows = transform_hourly(city, payload)
+            validate_rows(rows)
             n = load_clean(rows)
             log.info("loaded city=%s rows=%s", city, n)
         except Exception:
