@@ -7,11 +7,11 @@ in a PostgreSQL database.
 ## How it works
 
 1. **Extract:** `extract.py` calls the API for each city.
-2. **Save raw:** the full API response is stored as-is in the table `raw.api_responses`.
+2. **Save:** the full API response is stored as-is in the table `bronze.api_responses`.
 3. **Transform:** `transform.py` converts the response into one row per city per hour.
-4. **Load:** `load.py` saves those rows in the table `clean.hourly_weather`.
+4. **Load:** `load.py` saves those rows in the table `silver.hourly_weather`.
 
-Running the pipeline twice does not create duplicate rows in `clean.hourly_weather`.
+Running the pipeline twice does not create duplicate rows in `silver.hourly_weather`.
 The table has a primary key on (city, observed_at), and the load updates a row if
 it already exists instead of inserting it again.
 
@@ -43,7 +43,7 @@ python3 src/main.py
 
 ```bash
 docker compose exec db psql -U pipeline -d weather \
-  -c "SELECT city, count(*) FROM clean.hourly_weather GROUP BY city;"
+  -c "SELECT city, count(*) FROM bronze.hourly_weather GROUP BY city;"
 ```
 
 Run the pipeline again and repeat the query. The counts stay the same.
@@ -56,7 +56,7 @@ pytest -v
 
 ## Decisions I made
 
-- **Raw and clean tables:** I keep the original API response, so if my transform
+- **bronze and silver tables:** I keep the original API response, so if my transform
   has a bug I can fix it and reprocess without calling the API again.
 - **Timestamps in UTC:** avoids confusion between time zones.
 - **Missing values stay empty (NULL):** no measurement is not the same as zero rain.
@@ -68,7 +68,7 @@ pytest -v
 - Only the transform step has automated tests.
 - There is no scheduler yet. I run it by hand.
 - There are no data quality checks yet.
-- The raw table grows with every run and is never cleaned up.
+- The bronze table grows with every run and is never cleaned up.
 
 ## Next steps
 
