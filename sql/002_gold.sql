@@ -9,3 +9,14 @@ SELECT
     count(*)                                 AS hours_reported
 FROM silver.hourly_weather
 GROUP BY city, (observed_at AT TIME ZONE 'UTC')::date;
+
+CREATE OR REPLACE VIEW gold.latest_by_city AS
+SELECT city, observed_at, temperature_c, precipitation_mm, wind_speed_kmh
+FROM (
+    SELECT
+        city, observed_at, temperature_c, precipitation_mm, wind_speed_kmh,
+        ROW_NUMBER() OVER (PARTITION BY city ORDER BY observed_at DESC) AS rn
+    FROM silver.hourly_weather
+    WHERE observed_at <= now()
+) ranked
+WHERE rn = 1;
