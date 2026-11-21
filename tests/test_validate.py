@@ -48,3 +48,16 @@ def test_zero_and_positive_are_ok():
 def test_none_is_not_flagged_as_negative():
     rows = [{"city": "london", "precipitation_mm": None}]
     assert find_negative_values(rows, "precipitation_mm") == []
+
+def test_validate_rows_raises_on_negative_precipitation():
+    rows = [{"city": "london", "temperature_c": 15.0,
+             "precipitation_mm": -1.0, "wind_speed_kmh": 5.0}]
+    with pytest.raises(ValueError):
+        validate_rows(rows)
+
+
+def test_validate_rows_raises_on_negative_wind():
+    rows = [{"city": "london", "temperature_c": 15.0,
+             "precipitation_mm": 0.0, "wind_speed_kmh": -5.0}]
+    with pytest.raises(ValueError):
+        validate_rows(rows)
