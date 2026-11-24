@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: pipeline
       POSTGRES_PASSWORD: pipeline
@@ -12,4 +13,3 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
 volumes:
   pgdata:
-restart: unless-stopped
