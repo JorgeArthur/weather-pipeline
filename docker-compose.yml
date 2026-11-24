@@ -12,3 +12,4 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
 volumes:
   pgdata:
+restart: unless-stopped
