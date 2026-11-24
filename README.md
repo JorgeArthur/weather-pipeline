@@ -99,7 +99,7 @@ It is scheduled with cron (daily at 11:00 local time):
   checked by hand with `check.sh`.
 - The schedule only runs while my computer is on and Docker is running.
 - Days before the schedule was set up were not backfilled.
-- The API returns yesterday and today (UTC), so hours later than now are forecasts.
+- The API returns data from minus 3 days (UTC), so hours later than now are forecasts.
 - The bronze table grows with every run and is never cleaned up.
 
 ## Next steps
