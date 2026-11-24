@@ -27,7 +27,7 @@ def fetch_city(session: requests.Session, city: str) -> dict:
         "latitude": lat,
         "longitude": lon,
         "hourly": "temperature_2m,precipitation,wind_speed_10m",
-        "past_days": 1,
+        "past_days": 3,
         "forecast_days": 1,
         "timezone": "UTC",
     }
